@@ -67,6 +67,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -120,7 +121,7 @@ fun ResponsiveNavigationUI(
 ) {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
-    var selectedItem by remember { mutableStateOf("Favourites") }
+    var selectedItem by remember { mutableStateOf("Cook") }
 
     if (isTablet) {
         Row(modifier = Modifier.fillMaxSize()) {
@@ -164,9 +165,14 @@ fun SidebarNavigation(
     ) {
         Spacer(modifier = Modifier.height(40.dp))
 
+        val cookIcon = ImageVector.vectorResource(id = R.drawable.ic_cook)
+        val deviceIcon = ImageVector.vectorResource(id = R.drawable.ic_device)
+        val manualIcon = ImageVector.vectorResource(id = R.drawable.ic_manual)
+        val prefIcon = ImageVector.vectorResource(id = R.drawable.ic_preference)
+
         NavigationItem(
             "Cook",
-            Icons.Default.Favorite,
+            cookIcon,
             selectedItem == "Cook"
         ) { onItemSelected("Cook") }
         NavigationItem(
@@ -174,19 +180,19 @@ fun SidebarNavigation(
             Icons.Default.Favorite,
             selectedItem == "Favourites"
         ) { onItemSelected("Favourites") }
-        NavigationItem("Manual", Icons.Default.Favorite, selectedItem == "Manual") {
+        NavigationItem("Manual", manualIcon, selectedItem == "Manual") {
             onItemSelected(
                 "Manual"
             )
         }
-        NavigationItem("Device", Icons.Default.Favorite, selectedItem == "Device") {
+        NavigationItem("Device", deviceIcon, selectedItem == "Device") {
             onItemSelected(
                 "Device"
             )
         }
         NavigationItem(
             "Preferences",
-            Icons.Default.Settings,
+            prefIcon,
             selectedItem == "Preferences"
         ) { onItemSelected("Preferences") }
         NavigationItem(
@@ -245,7 +251,9 @@ fun MainContent(
     onNavDrawerClick: () -> Unit
 ) {
     Box(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = Color.White)
     ) {
         val dishTypeList = viewModel.dishTypeDataList.collectAsState()
         val recommendationData = viewModel.dishDataDataList.collectAsState()
@@ -464,7 +472,7 @@ fun ScheduledItemCard(
     Row(
         modifier = Modifier
             .background(Color(0xFF1B2730), shape = RoundedCornerShape(40.dp))
-            .padding(horizontal = 12.dp, vertical = 8.dp),
+            .padding(start = 8.dp, end = 8.dp, top = 4.dp, bottom = 4.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Box(

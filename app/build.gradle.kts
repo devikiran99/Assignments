@@ -73,15 +73,9 @@ dependencies {
     implementation (libs.retrofit)
     implementation (libs.retrofit2.converter.gson)
 
-    //YouTube URL extractor
-    implementation (libs.youtube.url.extractor)
-
     //Dagger Hilt
     implementation(libs.hilt)
     ksp(libs.hilt.compiler)
-
-    //Navigation
-    implementation(libs.navigation.compose)
 
     //Coil
     implementation(libs.coil.compose)
@@ -90,5 +84,4 @@ dependencies {
     // Material 3
     implementation(libs.material3)
     implementation(libs.material3.window.size)
-
 }
