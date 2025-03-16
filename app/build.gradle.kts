@@ -87,4 +87,8 @@ dependencies {
     implementation(libs.coil.compose)
     implementation(libs.coil.compose.network)
 
+    // Material 3
+    implementation(libs.material3)
+    implementation(libs.material3.window.size)
+
 }
