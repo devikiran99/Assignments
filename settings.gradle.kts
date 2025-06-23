@@ -21,3 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Assignments"
 include(":app")
+include(":app:baselineprofile")
