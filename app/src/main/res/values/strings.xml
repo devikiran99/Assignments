@@ -1,3 +1,29 @@
 <resources>
     <string name="app_name">Assignments</string>
+    <string name="top_bar_text">Prestige lake side Habitat Habitat …</string>
+    <string name="passion_text">Passion &amp; Pursuits</string>
+    <string name="live_text">Live &amp; Trending Near You</string>
+    <string name="passion_text_all">All</string>
+    <string name="passion_text_basket_ball">Basket Ball</string>
+    <string name="passion_text_bmx">BMX</string>
+    <string name="passion_text_debate">Debate</string>
+    <string name="passion_text_critical">Critical</string>
+    <string name="passion_text_community">Community</string>
+    <string name="passion_text_donate">Blood Donate</string>
+    <string name="passion_text_live">Live &amp; Trending Near You</string>
+    <string name="passion_text_planned_activity">Planned Activity</string>
+    <string name="passion_text_live_activity">Live Activity</string>
+    <string name="user_name">Jemmy Roy</string>
+    <string name="user_last_visit">2 hours ago</string>
+    <string name="user_interest">Interest requested</string>
+    <string name="user_current_address">Chilling at Summer House cafe Lorem Ipsum has the industry\'s standard</string>
+    <string name="current_date">Saturday, October 21 at 7:00 PM </string>
+    <string name="number_of_join">16 Joined</string>
+    <string name="user_name_emily">Emily Lilly</string>
+    <string name="user_name_joseph">Mera Joseph</string>
+    <string name="joseph_current_location">Chilling at Summer House cafe…</string>
+    <string name="joseph_joined_date">Jan 14 2024 | 10:30</string>
+    <string name="emily_last_visit">9 min ago</string>
+    <string name="emily_status_text">Today, I experienced the most amazing music and The air feels amazing…    more</string>
+
 </resources>
