@@ -14,4 +14,6 @@
     <string name="dummy_user_password">Albert@43234$5</string>
     <string name="register">Register</string>
     <string name="login">Login</string>
+    <string name="add_new_note_description">Notes Description....</string>
+    <string name="add_new_note_title">Notes Title</string>
 </resources>

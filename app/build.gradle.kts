@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
+    id("kotlin-parcelize")
 }
 
 android {
@@ -87,6 +88,7 @@ dependencies {
 
     //Navigation
     implementation(libs.navigation.compose)
+    implementation(libs.hilt.navigation.compose)
 
     //Coil
     implementation(libs.coil.compose)

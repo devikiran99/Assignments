@@ -15,6 +15,7 @@ adaptiveAndroid = "1.1.0"
 lifecycle = "2.9.1"
 navigationCompose = "2.9.0"
 hilt = "2.56.2"
+hiltNavigation = "1.2.0"
 ksp = "2.0.21-1.0.27"
 kotlinxCoroutinesAndroid = "1.10.2"
 kotlinxCoroutinesCore = "1.10.2"
@@ -50,6 +51,7 @@ youtube-url-extractor = { module = "com.pierfrancescosoffritti.androidyoutubepla
 navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 hilt = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
+hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigation" }
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
 coil-compose-network = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coil" }
 androidx-animation-core-lint = { group = "androidx.compose.animation", name = "animation-core-lint", version.ref = "animationCoreLint" }
