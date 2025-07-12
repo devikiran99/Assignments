@@ -2,6 +2,7 @@ package com.devikiran.assignments.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -25,6 +26,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -34,13 +36,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.devikiran.assignments.R
-import com.devikiran.assignments.data.NoteData
 import com.devikiran.assignments.data.ActionBarData
+import com.devikiran.assignments.data.NoteData
+import com.devikiran.assignments.data.utils.NoteDataScreenEvent
 import com.devikiran.assignments.view_model.NotesViewModel
 
 
@@ -49,18 +53,37 @@ fun NotesScreen(notesViewModel: NotesViewModel) {
 
     StaggeredVerticalGrid(notesViewModel) { note ->
         NoteItem(
-            noteData = note,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            noteData =note,
+            onValueChange = {
+                notesViewModel.onEvent(it)
+            }
         )
     }
 }
 
 @Composable
-fun NoteItem(noteData: NoteData, modifier: Modifier = Modifier) {
+fun NoteItem(
+    modifier: Modifier = Modifier,
+    noteData: NoteData,
+    onValueChange: (NoteDataScreenEvent) -> Unit
+) {
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .padding(8.dp),
+            .padding(8.dp)
+            .pointerInput(Unit) {
+                detectTapGestures(
+                    onTap = {
+                        onValueChange(NoteDataScreenEvent.OnClick(noteData))
+
+                    },
+                    onLongPress = {
+                        onValueChange(NoteDataScreenEvent.OnLongClick(noteData))
+
+                    }
+                )
+            },
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
@@ -91,8 +114,8 @@ fun StaggeredVerticalGrid(
     ) {
         val columns = remember { List(numColumns) { mutableStateListOf<NoteData>() } }
 
-
-        notesViewModel.sampleNoteData.forEachIndexed { index, item ->
+        val noteState = notesViewModel.noteState.collectAsState()
+        noteState.value.forEachIndexed { index, item ->
             columns[index % numColumns].add(item)
         }
 
@@ -134,7 +157,7 @@ fun homeScreenActionBar(notesViewModel: NotesViewModel) = ActionBarData(
                     ProfileScreenAlertDialogue()
                 }
 
-                Text("Notes", color = colorResource(R.color.black))
+                Text("Notes", color = colorResource(R.color.black_1))
 
                 Spacer(modifier = Modifier.weight(1f))
 

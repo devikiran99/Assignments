@@ -4,6 +4,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -13,12 +15,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import com.devikiran.assignments.data.ActionBarData
-import com.devikiran.assignments.data.NavigationData
-import com.devikiran.assignments.view_model.AddNewNoteViewModel
+import com.devikiran.assignments.data.NoteData
+import com.devikiran.assignments.data.NoteListScreenData
 import com.devikiran.assignments.view_model.NotesDetailViewModel
 import com.devikiran.assignments.view_model.NotesViewModel
-
 
 @Composable
 fun MainScreen() {
@@ -33,27 +35,52 @@ fun MainScreen() {
     ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = NavigationData.NoteScreen.name,
+            startDestination = NoteListScreenData,
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            composable(NavigationData.NoteScreen.name) {
+            //Note list Screen
+            composable<NoteListScreenData> {
+
                 val notesVewModel: NotesViewModel = hiltViewModel()
                 actionBarData = homeScreenActionBar(notesVewModel)
+
                 NotesScreen(notesVewModel)
+
+                notesVewModel.navigateTo = { noteData ->
+                    navController.navigate(noteData)
+                }
+
             }
 
-            composable(NavigationData.NoteDetailScreen.name) {
+            //Note Detail Screen
+            composable<NoteData> {
+                val noteData = it.toRoute<NoteData>()
                 val noteDetailVewModel: NotesDetailViewModel = hiltViewModel()
-                actionBarData = noteDetailActionBar(noteDetailVewModel)
-                NoteDetailScreen(noteDetailVewModel)
-            }
 
-            composable(NavigationData.AddNewNotesScreen.name) {
-                val addNewNoteViewModel: AddNewNoteViewModel = hiltViewModel()
-                actionBarData = insertNoteScreenAppBar(addNewNoteViewModel)
-                AddNewNote(addNewNoteViewModel)
+                LaunchedEffect(Unit) {
+                    noteDetailVewModel.initNoteData(noteData)
+                }
+
+                noteDetailVewModel.navigateTo = {
+                    navController.popBackStack()
+                }
+
+                val noteDetailData = noteDetailVewModel.noteDetailDataState.collectAsState()
+
+                if (noteDetailData.value != null) {
+                    actionBarData = noteDetailActionBar (
+                        onValueChange = {
+                            noteDetailVewModel.onEvent(it)
+                        }
+                    )
+                    NoteDetailScreen(noteDetailData.value!!,
+                        onValueChange = {
+                            noteDetailVewModel.onEvent(it)
+                        }
+                    )
+                }
             }
         }
     }

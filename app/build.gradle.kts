@@ -4,7 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
-    id("kotlin-parcelize")
+    alias(libs.plugins.jetbrains.kotlin.serialization)
 }
 
 android {
@@ -93,5 +93,8 @@ dependencies {
     //Coil
     implementation(libs.coil.compose)
     implementation(libs.coil.compose.network)
+
+    //Serialization
+    implementation(libs.kotlinx.serialization.json)
 
 }
