@@ -1,5 +1,6 @@
-package com.devikiran.assignments.screens
+package com.devikiran.assignments.screens.note_detail
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -8,110 +9,78 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.devikiran.assignments.R
 import com.devikiran.assignments.data.ActionBarData
-import com.devikiran.assignments.view_model.AddNewNoteViewModel
+import com.devikiran.assignments.data.NoteData
 
 @Composable
-fun AddNewNote(addNewNoteViewModel: AddNewNoteViewModel) {
+fun NoteDetailScreen(noteDetailData: NoteData, onValueChange: (NoteDetailScreenEvent) -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxSize()
 
     ) {
-        var titleText by remember { mutableStateOf("") }
-        var descriptionText by remember { mutableStateOf("") }
-
         Column(
             verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             TextField(
-                value = titleText,
-                onValueChange = { titleText = it },
-                placeholder = {
-                    Text(
-                        text = stringResource(R.string.add_new_note_title),
-                        color = colorResource(R.color.white_2),
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Medium,
-                        fontFamily = FontFamily.SansSerif
-                    )
-                },
-                singleLine = true,
+                value = noteDetailData.title,
+                onValueChange = { value ->
+                    onValueChange(NoteDetailScreenEvent.OnNoteTitleChanged(value))
+                                },
                 textStyle = TextStyle(
-                    color = colorResource(R.color.white_1),
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Medium,
-                    fontFamily = FontFamily.SansSerif
+                    color = colorResource(R.color.black_2),
+                    fontSize = 24.sp
                 ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp)
+                    .background(colorResource(R.color.white_1)),
                 colors = TextFieldDefaults.colors(
                     focusedContainerColor = Color.Transparent,
                     unfocusedContainerColor = Color.Transparent,
                     disabledContainerColor = Color.Transparent,
-                    cursorColor = Color.White,
+                    cursorColor = colorResource(R.color.black_2),
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent
-                ),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 8.dp)
+                )
             )
 
-            Spacer(modifier = Modifier.size(8.dp))
-
             TextField(
-                value = descriptionText,
-                onValueChange = { descriptionText = it },
-                placeholder = {
-                    Text(
-                        text = stringResource(R.string.add_new_note_description),
-                        color = colorResource(R.color.white_2),
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.Medium,
-                        fontFamily = FontFamily.SansSerif
-                    )
+                value = noteDetailData.content,
+                onValueChange = { value ->
+                    onValueChange(NoteDetailScreenEvent.OnNoteContentChanged(value))
                 },
                 textStyle = TextStyle(
-                    color = Color.White,
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Medium,
-                    fontFamily = FontFamily.SansSerif
+                    color = colorResource(R.color.black_2),
+                    fontSize = 18.sp
                 ),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 8.dp)
+                    .padding(8.dp)
                     .weight(1f)
                     .align(Alignment.Start),
                 colors = TextFieldDefaults.colors(
                     focusedContainerColor = Color.Transparent,
                     unfocusedContainerColor = Color.Transparent,
                     disabledContainerColor = Color.Transparent,
-                    cursorColor = Color.White,
+                    cursorColor = colorResource(R.color.black_2),
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent
                 )
@@ -120,11 +89,12 @@ fun AddNewNote(addNewNoteViewModel: AddNewNoteViewModel) {
     }
 }
 
-fun insertNoteScreenAppBar(addNewNoteViewModel: AddNewNoteViewModel) = ActionBarData(
+fun noteDetailActionBar(onValueChange: (NoteDetailScreenEvent) -> Unit) = ActionBarData(
     topBar = {
         Surface(
             color = colorResource(R.color.white_1),
-            tonalElevation = 4.dp
+            tonalElevation = 4.dp,
+            modifier = Modifier.statusBarsPadding()
         ) {
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -133,30 +103,42 @@ fun insertNoteScreenAppBar(addNewNoteViewModel: AddNewNoteViewModel) = ActionBar
                     .padding(horizontal = 8.dp)
             )
             {
-
                 IconButton(
-                    onClick = {}
+                    onClick = {
+                        onValueChange(NoteDetailScreenEvent.OnBackPress)
+                    }
                 ) {
                     Icon(
-                        painter = painterResource(R.drawable.ic_close),
+                        painter = painterResource(R.drawable.ic_back),
                         contentDescription = null,
-                        tint = Color.Unspecified
+                        tint = colorResource(R.color.gray_1)
                     )
                 }
 
-                Text(
-                    text = "Create Notes",
-                    color = MaterialTheme.colorScheme.onPrimary,
-                    modifier = Modifier.weight(1f)
-                )
+                Spacer(modifier = Modifier.weight(1f))
 
                 IconButton(
-                    onClick = {}
+                    onClick = {
+                        onValueChange(NoteDetailScreenEvent.OnRedo)
+
+                    }
                 ) {
                     Icon(
-                        painter = painterResource(R.drawable.ic_done),
+                        painter = painterResource(R.drawable.ic_undo),
                         contentDescription = null,
-                        tint = Color.Unspecified
+                        tint = colorResource(R.color.gray_1)
+                    )
+                }
+
+                IconButton(
+                    onClick = {
+                        onValueChange(NoteDetailScreenEvent.OnUndo)
+                    }
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_redo),
+                        contentDescription = null,
+                        tint = colorResource(R.color.gray_1)
                     )
                 }
             }

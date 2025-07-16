@@ -1,9 +1,9 @@
-package com.devikiran.assignments.view_model
+package com.devikiran.assignments.screens.note_detail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.devikiran.assignments.data.NoteData
-import com.devikiran.assignments.data.utils.NoteDetailScreenEvent
+import com.devikiran.assignments.data.NoteDetailActionBarData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -106,9 +106,4 @@ class NotesDetailViewModel @Inject constructor(): ViewModel() {
             }
         }
     }
-
-    data class NoteDetailActionBarData(
-        val isRedo: Boolean = false,
-        val isUndo: Boolean = false
-    )
 }

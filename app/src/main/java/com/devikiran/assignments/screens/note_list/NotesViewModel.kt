@@ -1,9 +1,9 @@
-package com.devikiran.assignments.view_model
+package com.devikiran.assignments.screens.note_list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.devikiran.assignments.data.NoteData
-import com.devikiran.assignments.data.utils.NoteDataScreenEvent
+import com.devikiran.assignments.screens.utils.NoteRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -12,7 +12,9 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 @HiltViewModel
-class NotesViewModel @Inject constructor(): ViewModel() {
+class NotesViewModel @Inject constructor(
+    private val repository: NoteRepository
+): ViewModel() {
 
 
 
@@ -36,15 +38,15 @@ class NotesViewModel @Inject constructor(): ViewModel() {
         _noteState.update { ArrayList(sampleNoteData)  }
     }
 
-    fun onEvent(event: NoteDataScreenEvent) {
+    fun onEvent(event: NoteListScreenEvent) {
         when (event) {
-            is NoteDataScreenEvent.OnClick -> {
+            is NoteListScreenEvent.OnClick -> {
                 viewModelScope.launch {
                     navigateTo(event.noteData)
                 }
             }
-            is NoteDataScreenEvent.OnLongClick -> {}
-            is NoteDataScreenEvent.OnOptionMenuClick -> {}
+            is NoteListScreenEvent.OnLongClick -> {}
+            is NoteListScreenEvent.OnOptionMenuClick -> {}
         }
     }
 }

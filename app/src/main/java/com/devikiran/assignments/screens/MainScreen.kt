@@ -19,8 +19,12 @@ import androidx.navigation.toRoute
 import com.devikiran.assignments.data.ActionBarData
 import com.devikiran.assignments.data.NoteData
 import com.devikiran.assignments.data.NoteListScreenData
-import com.devikiran.assignments.view_model.NotesDetailViewModel
-import com.devikiran.assignments.view_model.NotesViewModel
+import com.devikiran.assignments.screens.note_detail.NoteDetailScreen
+import com.devikiran.assignments.screens.note_detail.noteDetailActionBar
+import com.devikiran.assignments.screens.note_list.NotesScreen
+import com.devikiran.assignments.screens.note_list.homeScreenActionBar
+import com.devikiran.assignments.screens.note_detail.NotesDetailViewModel
+import com.devikiran.assignments.screens.note_list.NotesViewModel
 
 @Composable
 fun MainScreen() {
@@ -40,6 +44,14 @@ fun MainScreen() {
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
+            composable(""){
+
+            }
+
+            composable(""){
+
+            }
+
             //Note list Screen
             composable<NoteListScreenData> {
 
@@ -51,7 +63,6 @@ fun MainScreen() {
                 notesVewModel.navigateTo = { noteData ->
                     navController.navigate(noteData)
                 }
-
             }
 
             //Note Detail Screen

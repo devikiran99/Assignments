@@ -1,4 +1,4 @@
-package com.devikiran.assignments.screens
+package com.devikiran.assignments.screens.note_list
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement

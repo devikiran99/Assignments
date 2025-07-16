@@ -1,4 +1,4 @@
-package com.devikiran.assignments.screens
+package com.devikiran.assignments.screens.register
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -37,7 +37,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.devikiran.assignments.R
 import com.devikiran.assignments.ui.theme.AssignmentsTheme
-import javax.security.auth.login.LoginException
 
 @Composable
 fun Register(modifier: Modifier = Modifier) {
@@ -266,18 +265,4 @@ fun Login() {
             }
         }
     }
-}
-
-
-
-@Preview
-@Composable
-fun Preview(modifier: Modifier = Modifier) {
-    AssignmentsTheme {
-        Login(
-        )
-
-//        CustomEditText()
-    }
-
 }

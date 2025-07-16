@@ -1,4 +1,4 @@
-package com.devikiran.assignments.data.utils
+package com.devikiran.assignments.screens.note_detail
 
 sealed class NoteDetailScreenEvent {
     data class OnNoteTitleChanged(val tile: String) : NoteDetailScreenEvent()

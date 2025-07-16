@@ -1,4 +1,4 @@
-package com.devikiran.assignments.screens
+package com.devikiran.assignments.screens.note_list
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -44,8 +44,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.devikiran.assignments.R
 import com.devikiran.assignments.data.ActionBarData
 import com.devikiran.assignments.data.NoteData
-import com.devikiran.assignments.data.utils.NoteDataScreenEvent
-import com.devikiran.assignments.view_model.NotesViewModel
 
 
 @Composable
@@ -66,7 +64,7 @@ fun NotesScreen(notesViewModel: NotesViewModel) {
 fun NoteItem(
     modifier: Modifier = Modifier,
     noteData: NoteData,
-    onValueChange: (NoteDataScreenEvent) -> Unit
+    onValueChange: (NoteListScreenEvent) -> Unit
 ) {
     Card(
         modifier = modifier
@@ -75,11 +73,11 @@ fun NoteItem(
             .pointerInput(Unit) {
                 detectTapGestures(
                     onTap = {
-                        onValueChange(NoteDataScreenEvent.OnClick(noteData))
+                        onValueChange(NoteListScreenEvent.OnClick(noteData))
 
                     },
                     onLongPress = {
-                        onValueChange(NoteDataScreenEvent.OnLongClick(noteData))
+                        onValueChange(NoteListScreenEvent.OnLongClick(noteData))
 
                     }
                 )
