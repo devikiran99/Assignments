@@ -36,12 +36,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.devikiran.assignments.R
+import com.devikiran.assignments.data.RegistrationScreenData
 import com.devikiran.assignments.ui.theme.AssignmentsTheme
 
 @Composable
-fun Register(modifier: Modifier = Modifier) {
+fun Register(screenData: RegistrationScreenData, onValueChange: (RegisterScreenEvent) -> Unit) {
     Box(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxSize()
             .background(
                 color = Color.Black,
@@ -80,11 +81,73 @@ fun Register(modifier: Modifier = Modifier) {
             }
 
 
-            CustomEditText()
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight()
+                    .padding(start = 32.dp, end = 32.dp, top = 32.dp),
+                verticalArrangement = Arrangement.SpaceBetween,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+
+
+                OutlinedTextField(
+                    value = screenData.userName,
+                    onValueChange = { onValueChange(RegisterScreenEvent.OnUserName(it)) },
+                    shape = RoundedCornerShape(16.dp),
+                    label = { Text(text = stringResource(R.string.user_name)) },
+                    placeholder = { Text(text = stringResource(R.string.dummy_user_name)) },
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+
+                OutlinedTextField(
+                    value = screenData.email,
+                    onValueChange = { onValueChange(RegisterScreenEvent.OnEmail(it)) },
+                    shape = RoundedCornerShape(16.dp),
+                    label = { Text(text = stringResource(R.string.user_email)) },
+                    placeholder = { Text(text = stringResource(R.string.dummy_user_email)) },
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                OutlinedTextField(
+                    value = screenData.password,
+                    onValueChange = { onValueChange(RegisterScreenEvent.OnEnterPassword(it)) },
+                    label = { Text(text = stringResource(R.string.set_user_password)) },
+                    placeholder = { Text(text = stringResource(R.string.dummy_user_password)) },
+                    shape = RoundedCornerShape(16.dp),
+                    visualTransformation = if (screenData.isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                    trailingIcon = {
+                        val image = if (screenData.isPasswordVisible)
+                            painterResource(R.drawable.ic_eye)
+                        else
+                            painterResource(R.drawable.ic_eye_off)
+
+                        IconButton(
+                            onClick = { onValueChange(RegisterScreenEvent.OnPasswordVisible) }
+                        ) {
+                            Icon(
+                                painter = image,
+                                contentDescription = null,
+                                modifier = Modifier.size(20.dp))
+                        }
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                OutlinedTextField(
+                    value = screenData.rePassword,
+                    onValueChange = { onValueChange(RegisterScreenEvent.OnReEnterPassword(it)) },
+                    label = { Text(text = stringResource(R.string.reset_user_password)) },
+                    shape = RoundedCornerShape(16.dp),
+                    visualTransformation = PasswordVisualTransformation(),
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
 
             Button(
                 onClick = {
-
+                    onValueChange(RegisterScreenEvent.OnRegister)
                 },
                 shape = RoundedCornerShape(24.dp),
                 modifier = Modifier
