@@ -91,4 +91,9 @@ dependencies {
     implementation(libs.coil.compose)
     implementation(libs.coil.compose.network)
 
+    //Room DataBase
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
+    ksp(libs.room.compiler)
+
 }
