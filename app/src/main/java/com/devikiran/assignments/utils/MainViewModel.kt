@@ -22,14 +22,19 @@ class MainViewModel @Inject constructor(private val repository: MainRepository) 
     private val _ghRepoDataState = MutableStateFlow<List<GHRepoData>>(emptyList())
     val ghRepoDataState: StateFlow<List<GHRepoData>> = _ghRepoDataState
 
+    private val currentGhRepoDataList = arrayListOf<GHRepoData>()
+
     private val _navigateTo = MutableStateFlow<String>("loading")
     val navigateTo: StateFlow<String> = _navigateTo
+
+    var ghRepoData: GHRepoData ?= null
 
 
     init {
         viewModelScope.launch {
             repository.getGhRepoData().collectLatest { data ->
                 if (data.isNotEmpty()) {
+                    currentGhRepoDataList.addAll(ArrayList(data))
                     _ghRepoDataState.update {
                         data
                     }
@@ -74,6 +79,33 @@ class MainViewModel @Inject constructor(private val repository: MainRepository) 
                     AppDataEvent.OnInitialization -> {}
                 }
             }
+        }
+    }
+
+    fun searchByName(name: String) {
+        viewModelScope.launch {
+
+            val filteredList = currentGhRepoDataList.filter {
+                it.name.startsWith(name, ignoreCase = true)
+            }
+
+            _ghRepoDataState.update {
+                filteredList
+            }
+        }
+    }
+
+    fun onItemClicked(ghRepoData: GHRepoData){
+        viewModelScope.launch {
+            this@MainViewModel.ghRepoData = ghRepoData
+            _ghRepoDataState.update { currentGhRepoDataList }
+            _navigateTo.update { "loadGitRepo" }
+        }
+    }
+
+    fun onBackPressed(destination: String){
+        viewModelScope.launch {
+            _navigateTo.update { destination }
         }
     }
 

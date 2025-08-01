@@ -26,6 +26,7 @@ class MainActivity : ComponentActivity() {
             AssignmentsTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     MainScreen(
+                        activity = this,
                         modifier = Modifier.padding(innerPadding),
                         viewModel = viewModel
                     )
