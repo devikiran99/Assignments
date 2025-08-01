@@ -1,29 +1,28 @@
 package com.devikiran.assignments.screens
 
-import androidx.compose.foundation.background
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -31,8 +30,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import coil3.compose.AsyncImage
-import com.devikiran.assignments.data.AppData
+import com.devikiran.assignments.data.GHRepoData
 import com.devikiran.assignments.utils.MainViewModel
 import kotlinx.coroutines.flow.collectLatest
 
@@ -41,7 +39,6 @@ fun MainScreen(
     modifier: Modifier = Modifier,
     viewModel: MainViewModel
 ) {
-
     val navController = rememberNavController()
 
     NavHost(
@@ -60,21 +57,18 @@ fun MainScreen(
                 Text(
                     text = "Loading Data Please Wait....",
 
-                )
+                    )
             }
-
         }
 
         composable("success") {
-
-            val appDataList = viewModel.appDataState.collectAsState()
-            AppDataItemListScreen(
-                appDataList.value
+            val ghRepoDataList = viewModel.ghRepoDataState.collectAsState()
+            GhRepoItemListScreen(
+                ghRepoDataList.value
             )
         }
 
-        //Note list Screen
-        composable ("failure") {
+        composable("failure") {
             Column(
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.Center,
@@ -82,7 +76,7 @@ fun MainScreen(
             ) {
                 Text(
                     text = "Failed !!! Connect to internet and Try again",
-                    )
+                )
 
                 Button(
                     onClick = {
@@ -105,111 +99,69 @@ fun MainScreen(
 }
 
 @Composable
-fun AppDataItemListScreen(
-    appDataList: List<AppData>
-    ) {
+fun GhRepoItemListScreen(
+    ghRepoDataList: List<GHRepoData>
+) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-    ){
+    ) {
         LazyColumn(
             modifier = Modifier.padding(16.dp)
         ) {
-            items(appDataList){ appData ->
-                AppItem(appData)
+            items(ghRepoDataList) { ghRepoData ->
+                GhRepoItem(ghRepoData)
             }
         }
     }
 }
 
 @Composable
-fun AppItem(appData: AppData) {
-
-    Row(
-        horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically,
+fun GhRepoItem(ghRepoData: GHRepoData) {
+    Card(
         modifier = Modifier
-            .padding(8.dp)
-            .background(
-                color = Color.LightGray,
-                shape = RoundedCornerShape(16.dp))
-            .clip(RoundedCornerShape(16.dp))
-            .padding(horizontal =  16.dp, vertical = 4.dp)
-
+            .fillMaxWidth()
+            .padding(vertical = 8.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        ),
+        shape = RoundedCornerShape(16.dp),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline)
     ) {
-        AsyncImage(
-            model = appData.image,
-            contentDescription = null,
-            modifier = Modifier
-                .size(56.dp)
-                .clip(CircleShape),
-            contentScale = ContentScale.Crop
-        )
-
-        Spacer(modifier = Modifier. width(8.dp))
-
         Column(
-            verticalArrangement = Arrangement.Center
+            modifier = Modifier.padding(16.dp)
         ) {
-
             Row(
-                horizontalArrangement = Arrangement.Start,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-
                 Text(
-                    text = appData.title,
+                    text = ghRepoData.id.toString(),
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.weight(1f)
+                    color = MaterialTheme.colorScheme.onSurface
                 )
-
                 Spacer(modifier = Modifier.size(8.dp))
-
                 Text(
-                    text = appData.category,
+                    text = ghRepoData.name,
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Normal,
                     maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.weight(1f),
+                    color = MaterialTheme.colorScheme.onSurface
                 )
-
-                Spacer(modifier = Modifier.size(8.dp))
-
             }
-
+            Spacer(modifier = Modifier.size(4.dp))
             Text(
-                text = appData.description,
+                text = ghRepoData.htmlUrl,
                 fontSize = 10.sp,
                 fontWeight = FontWeight.SemiBold,
                 maxLines = 2,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
-
-            Row(
-                horizontalArrangement = Arrangement.Start,
-            ) {
-
-                Text(
-                    text = appData.price.toString(),
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.Bold,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-
-                Spacer(modifier = Modifier.size(8.dp))
-
-                Text(
-                    text = appData.rating.rate.toString(),
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.Bold,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-            }
         }
     }
 }

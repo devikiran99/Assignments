@@ -3,7 +3,7 @@ package com.devikiran.assignments.di
 import android.app.Application
 import android.content.Context
 import androidx.room.Room
-import com.devikiran.assignments.database.AppDataBase
+import com.devikiran.assignments.database.GhRepoDataBase
 import com.devikiran.assignments.network.ApiService
 import com.devikiran.assignments.utils.Utils.BASE_URL
 import com.devikiran.assignments.utils.MainRepository
@@ -22,8 +22,8 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideDataBase(app: Application): AppDataBase =
-        Room.databaseBuilder(app, AppDataBase::class.java, "app_database")
+    fun provideDataBase(app: Application): GhRepoDataBase =
+        Room.databaseBuilder(app, GhRepoDataBase::class.java, "gh_repo_database")
             .build()
 
     @Provides
@@ -31,8 +31,8 @@ object AppModule {
     fun provideRepository(
         @ApplicationContext context: Context,
         apiService: ApiService,
-        appDataBase: AppDataBase
-        ) = MainRepository(context, apiService, appDataBase)
+        ghRepoDataBase: GhRepoDataBase
+        ) = MainRepository(context, apiService, ghRepoDataBase)
 
     @Provides
     @Singleton
@@ -46,5 +46,5 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun providesAppDAo(db: AppDataBase) = db.AppDao()
+    fun providesAppDAo(ghRepoDb: GhRepoDataBase) = ghRepoDb.GhRepoDao()
 }

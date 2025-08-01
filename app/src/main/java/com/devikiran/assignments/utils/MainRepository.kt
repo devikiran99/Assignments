@@ -1,8 +1,8 @@
 package com.devikiran.assignments.utils
 
 import android.content.Context
-import com.devikiran.assignments.data.AppData
-import com.devikiran.assignments.database.AppDataBase
+import com.devikiran.assignments.data.GHRepoData
+import com.devikiran.assignments.database.GhRepoDataBase
 import com.devikiran.assignments.network.ApiService
 import com.devikiran.assignments.utils.Utils.isNetworkAvailable
 import kotlinx.coroutines.Dispatchers.IO
@@ -13,29 +13,27 @@ import javax.inject.Inject
 class MainRepository @Inject constructor(
     private val context: Context,
     private val apiService: ApiService,
-    appDb: AppDataBase
+    ghRepoDb: GhRepoDataBase
 ) {
-    private val appDao = appDb.AppDao()
+    private val ghRepoDao = ghRepoDb.GhRepoDao()
 
-    fun getAppData(): Flow<List<AppData>> = appDao.getAppData()
+    fun getGhRepoData(): Flow<List<GHRepoData>> = ghRepoDao.getGhRepoData()
 
-    suspend fun getAppDataFromServer(
+    suspend fun getGhRepoDataFromServer(
         onProcessingEvent: (AppDataEvent<String>) -> Unit
     ) = withContext(IO) {
-
 
         try {
             onProcessingEvent(AppDataEvent.OnLoading)
             if (isNetworkAvailable(context)) {
-                val newAppData = withContext(IO) { apiService.getAppData() }
-                if (newAppData.isNotEmpty()) {
-                    withContext(IO) { appDao.insertAppData(newAppData) }
+                val ghRepoDataList = withContext(IO) { apiService.getGhRepoData().ghRepoDataList }
+                if (ghRepoDataList.isNotEmpty()) {
+                    withContext(IO) { ghRepoDao.insertGhRepoData(ghRepoDataList) }
                     onProcessingEvent(AppDataEvent.OnComplete("Fetched Successfully"))
                 }
-            }else {
+            } else {
                 onProcessingEvent(AppDataEvent.OnFailure("Internet not available}"))
             }
-
         } catch (e: Exception) {
             onProcessingEvent(AppDataEvent.OnFailure("Error Occurred ${e.message}"))
         }

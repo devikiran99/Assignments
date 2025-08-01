@@ -3,12 +3,10 @@ package com.devikiran.assignments.utils
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 
 object Utils {
 
-    const val BASE_URL = "https://fakestoreapi.com/"
+    const val BASE_URL = "https://api.github.com/"
     const val TAG = "AssignmentsLogError"
 
     fun isNetworkAvailable(context: Context): Boolean {

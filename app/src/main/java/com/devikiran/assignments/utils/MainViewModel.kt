@@ -3,7 +3,9 @@ package com.devikiran.assignments.utils
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.devikiran.assignments.data.AppData
+import com.devikiran.assignments.data.GHRepoData
+import com.devikiran.assignments.utils.internet.InternetMonitor
+import com.devikiran.assignments.utils.internet.InternetState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -13,27 +15,27 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(private val  repository: MainRepository) : ViewModel(){
+class MainViewModel @Inject constructor(private val repository: MainRepository) : ViewModel() {
 
-    private lateinit var networkMonitor: NetworkMonitor
+    private lateinit var internetMonitor: InternetMonitor
 
-    private val _appDataState = MutableStateFlow<List<AppData>>(emptyList())
-    val appDataState: StateFlow<List<AppData>> = _appDataState
+    private val _ghRepoDataState = MutableStateFlow<List<GHRepoData>>(emptyList())
+    val ghRepoDataState: StateFlow<List<GHRepoData>> = _ghRepoDataState
 
     private val _navigateTo = MutableStateFlow<String>("loading")
     val navigateTo: StateFlow<String> = _navigateTo
 
 
-
     init {
         viewModelScope.launch {
-            repository.getAppData().collectLatest { data ->
-                if(data.isNotEmpty()) {
-                    _appDataState.update {
+            repository.getGhRepoData().collectLatest { data ->
+                if (data.isNotEmpty()) {
+                    _ghRepoDataState.update {
                         data
                     }
                     _navigateTo.update { "success" }
-                } else {
+                }
+                else {
                     _navigateTo.update { "failure" }
                 }
             }
@@ -42,45 +44,53 @@ class MainViewModel @Inject constructor(private val  repository: MainRepository)
 
     fun register(context: Context) {
         viewModelScope.launch {
-            networkMonitor = NetworkMonitor(context)
-            networkMonitor.register()
+            internetMonitor = InternetMonitor(context)
+            internetMonitor.register()
             handleNetworkConnectedState()
         }
     }
 
-    fun unregister(){
-        networkMonitor.unregister()
+    fun unregister() {
+        internetMonitor.unregister()
     }
 
     fun getDataFromServer() {
         viewModelScope.launch {
-            repository.getAppDataFromServer { state ->
-                when(state) {
+            repository.getGhRepoDataFromServer { state ->
+                when (state) {
                     is AppDataEvent.OnFailure -> {
                         _navigateTo.update { "failure" }
                     }
+
                     AppDataEvent.OnLoading -> {
                         _navigateTo.update { "loading" }
                     }
+
                     is AppDataEvent.OnComplete -> {
                         _navigateTo.update { "success" }
                     }
-                    is AppDataEvent.OnSuccess -> { }
-                    AppDataEvent.OnInitialization ->{ }
+
+                    is AppDataEvent.OnSuccess -> {}
+                    AppDataEvent.OnInitialization -> {}
                 }
             }
         }
-
     }
 
     private fun handleNetworkConnectedState() {
         viewModelScope.launch {
-            networkMonitor.isConnected.collectLatest { isConnected ->
-                if(isConnected) {
-                    getDataFromServer()
-                }else{
-                    if(_appDataState.value.isEmpty()) {
-                        _navigateTo.update { "failure" }
+            internetMonitor.isConnected.collectLatest { isConnected ->
+                when(isConnected){
+                    InternetState.IDLE -> {
+                        _navigateTo.update { "loading" }
+                    }
+                    InternetState.CONNECTED -> {
+                        getDataFromServer()
+                    }
+                    InternetState.DISCONNECTED -> {
+                        if (_ghRepoDataState.value.isEmpty()) {
+                            _navigateTo.update { "failure" }
+                        }
                     }
                 }
             }
