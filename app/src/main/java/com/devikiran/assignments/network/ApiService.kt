@@ -4,6 +4,7 @@ import com.devikiran.assignments.data.NoteData
 import com.devikiran.assignments.data.RefreshRequest
 import com.devikiran.assignments.data.Request
 import com.devikiran.assignments.data.TokenPair
+import com.devikiran.assignments.data.ValidToken
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.Header
@@ -26,4 +27,15 @@ interface ApiService {
     suspend fun refreshToken(
         @Body refreshRequest: RefreshRequest
     ): Response<TokenPair>
+
+    @POST("/auth/verifyAccessToken")
+    suspend fun isAccessTokenValid(
+        @Body token: ValidToken
+    ): Response<Boolean>
+
+
+    @POST("/auth/verifyRefreshToken")
+    suspend fun isRefreshTokenValid(
+        @Body token: ValidToken
+    ): Response<Boolean>
 }

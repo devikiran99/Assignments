@@ -17,14 +17,18 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.devikiran.assignments.data.ActionBarData
+import com.devikiran.assignments.data.LoginData
 import com.devikiran.assignments.data.NoteData
 import com.devikiran.assignments.data.NoteListScreenData
+import com.devikiran.assignments.data.RegistrationData
 import com.devikiran.assignments.screens.note_detail.NoteDetailScreen
 import com.devikiran.assignments.screens.note_detail.noteDetailActionBar
 import com.devikiran.assignments.screens.note_list.NotesScreen
 import com.devikiran.assignments.screens.note_list.homeScreenActionBar
 import com.devikiran.assignments.screens.note_detail.NotesDetailViewModel
 import com.devikiran.assignments.screens.note_list.NotesViewModel
+import com.devikiran.assignments.screens.register.Register
+import com.devikiran.assignments.screens.register.RegisterViewModel
 
 @Composable
 fun MainScreen() {
@@ -39,16 +43,21 @@ fun MainScreen() {
     ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = NoteListScreenData,
+            startDestination = RegistrationData,
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            composable(""){
-
+            composable<RegistrationData>{
+                val registrationViewModel: RegisterViewModel = hiltViewModel()
+                val registrationData  = registrationViewModel.registerRequestState.collectAsState()
+                Register(
+                    screenData = registrationData.value,
+                    onValueChange = { registrationViewModel.onValueChange(it)}
+                )
             }
 
-            composable(""){
+            composable<LoginData>{
 
             }
 

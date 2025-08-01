@@ -13,3 +13,7 @@ data class TokenPair(
 data class RefreshRequest(
     val refreshToken: String
 )
+
+data class ValidToken(
+    val token: String
+)

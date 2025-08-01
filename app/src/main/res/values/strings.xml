@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">Assignments</string>
 
+    !... Holder Screen ...!
+
+    <string name="holder_screen_name">Note Making App</string>
+
     !...  Register/Login Screen...!
 
     <string name="app_name_to_display">Notes</string>
@@ -16,4 +20,5 @@
     <string name="login">Login</string>
     <string name="add_new_note_description">Notes Description....</string>
     <string name="add_new_note_title">Notes Title</string>
+
 </resources>

@@ -4,6 +4,7 @@ import com.devikiran.assignments.data.NoteData
 import com.devikiran.assignments.data.RefreshRequest
 import com.devikiran.assignments.data.Request
 import com.devikiran.assignments.data.TokenPair
+import com.devikiran.assignments.data.ValidToken
 import com.devikiran.assignments.network.ApiService
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.delay
@@ -81,6 +82,36 @@ class NoteRepository @Inject constructor(
         } finally {
             delay(100)
             onProcessingEvent(NoteProgressEvent.Completed)
+        }
+    }
+
+    suspend fun isAccessTokenValid(
+        token: ValidToken
+    ): Boolean = withContext(IO) {
+        return@withContext try {
+            val response = apiService.isAccessTokenValid(token)
+            if (response.isSuccessful) {
+                response.body()!!
+            } else {
+                false
+            }
+        } catch (e: Exception) {
+            false
+        }
+    }
+
+    suspend fun isRefreshTokenValid(
+        token: ValidToken
+    ): Boolean = withContext(IO) {
+        return@withContext try {
+            val response = apiService.isRefreshTokenValid(token)
+            if (response.isSuccessful) {
+                response.body()!!
+            } else {
+                false
+            }
+        } catch (e: Exception) {
+            false
         }
     }
 }
