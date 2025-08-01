@@ -93,7 +93,11 @@ fun MainScreen(
 
     LaunchedEffect(viewModel.navigateTo) {
         viewModel.navigateTo.collectLatest {
-            navController.navigate(it)
+            navController.navigate(it) {
+                popUpTo(navController.currentDestination?.route ?: "") {
+                    inclusive = true
+                }
+            }
         }
     }
 }
